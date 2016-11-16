@@ -12,6 +12,7 @@ android {
     versionCode 1
     versionName "1.0"
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
   }
   buildTypes {
     release {
@@ -20,10 +21,6 @@ android {
     }
   }
 
-  compileOptions {
-    sourceCompatibility 1.8
-    targetCompatibility 1.8
-  }
 }
 
 dependencies {
