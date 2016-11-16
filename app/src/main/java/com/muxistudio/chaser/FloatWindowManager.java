@@ -9,6 +9,7 @@ import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.TextView;
 import com.muxistudio.chaser.ui.FloatWordView.FloatWordView;
+import com.muxistudio.chaser.utils.DimenUtil;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -54,7 +55,7 @@ public class FloatWindowManager {
         sFloatParams.width = FloatWordView.width;
         sFloatParams.height = FloatWordView.height;
         sFloatParams.x = FloatWordView.x;
-        sFloatParams.y = FloatWordView.y;
+        sFloatParams.y = FloatWordView.y - DimenUtil.getStatusBarHeight();
       }
       Log.d("tag",sFloatParams.type + "");
       sFloatWordView.setLayoutParams(sFloatParams);
