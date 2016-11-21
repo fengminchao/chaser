@@ -5,14 +5,17 @@ import android.content.Context;
 import android.graphics.PixelFormat;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.TextView;
-import com.muxistudio.chaser.ui.FloatWordView.FloatWordView;
+import com.muxistudio.chaser.bean.WordDetail;
+import com.muxistudio.chaser.widget.FloatWordView;
 import com.muxistudio.chaser.utils.DimenUtil;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by ybao on 16/11/16.
@@ -26,7 +29,6 @@ public class FloatWindowManager {
 
   private static LayoutParams sFloatParams;
 
-
   /**
    * 用于控制在屏幕上添加或移除悬浮窗
    */
@@ -37,29 +39,34 @@ public class FloatWindowManager {
    */
   private static ActivityManager mActivityManager;
 
+  private static List<WordDetail> sWordDetails;
+
   /**
    * 创建一个小悬浮窗。初始位置为屏幕的右部中间位置。
    *
    * @param context 必须为应用程序的Context.
    */
-  public static void createFloatView(Context context){
+  public static void createFloatView(Context context) {
     WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-    if (sFloatWordView == null){
+    if (sFloatWordView == null) {
       sFloatWordView = new FloatWordView(context);
-      if (sFloatParams == null){
-        sFloatParams = new LayoutParams();
-        sFloatParams.type = LayoutParams.TYPE_PHONE;
-        sFloatParams.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL | LayoutParams.FLAG_NOT_FOCUSABLE;
+      if (sFloatParams == null) {
+        sFloatParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT);
+        sFloatParams.type = LayoutParams.TYPE_PRIORITY_PHONE;
+        //sFloatParams.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL | LayoutParams.FLAG_NOT_FOCUSABLE;
+        sFloatParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE
+            | LayoutParams.FLAG_NOT_TOUCH_MODAL;
         sFloatParams.format = PixelFormat.RGBA_8888;
         sFloatParams.gravity = Gravity.LEFT | Gravity.TOP;
-        sFloatParams.width = FloatWordView.width;
-        sFloatParams.height = FloatWordView.height;
+        //sFloatParams.width = FloatWordView.width;
+        //sFloatParams.height = FloatWordView.height;
         sFloatParams.x = FloatWordView.x;
         sFloatParams.y = FloatWordView.y - DimenUtil.getStatusBarHeight();
       }
-      Log.d("tag",sFloatParams.type + "");
+      Log.d("tag", sFloatParams.type + "");
       sFloatWordView.setLayoutParams(sFloatParams);
-      windowManager.addView(sFloatWordView,sFloatParams);
+      windowManager.addView(sFloatWordView, sFloatParams);
     }
   }
 
@@ -88,10 +95,12 @@ public class FloatWindowManager {
     }
   }
 
-  public static void updateFloatView(Context context){
-    if (sFloatWordView != null){
+  public static void updateFloatView(Context context) {
+    if (sFloatWordView != null) {
       TextView mTvWord = (TextView) sFloatWordView.findViewById(R.id.tv_word);
-      mTvWord.setText(getUsedPercentValue(context));
+      TextView mTvExplain = (TextView) sFloatWordView.findViewById(R.id.tv_explain);
+      mTvWord.setText("fa");
+      mTvExplain.setText("fas");
     }
   }
 
