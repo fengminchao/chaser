@@ -22,7 +22,7 @@ public class GreendaoGenerator {
     word.addStringProperty("word");
     word.addStringProperty("phonetic");
     word.addStringProperty("explain");
-    word.addStringProperty("classId");
+    word.addIntProperty("classId");
 
     new DaoGenerator().generateAll(schema,"../Chaser/app/src/main/java");
   }

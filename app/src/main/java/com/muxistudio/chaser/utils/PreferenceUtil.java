@@ -11,6 +11,10 @@ import com.muxistudio.chaser.App;
 public class PreferenceUtil {
 
   public static final String KEY_CUR_REMBER_BANK = "key_curbank";
+  //每组单词的个数
+  public static final String KEY_GROUP_SIZE = "key_group_size";
+  //每组单词循环次数
+  public static final String KEY_CIRCLE_NUM = "key_circle_num";
 
   public static void putInt(String key, int value) {
     SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(App.sContext);

@@ -15,7 +15,7 @@ public class Word {
     private String word;
     private String phonetic;
     private String explain;
-    private String classId;
+    private Integer classId;
 
     @Generated
     public Word() {
@@ -26,7 +26,7 @@ public class Word {
     }
 
     @Generated
-    public Word(Long id, String word, String phonetic, String explain, String classId) {
+    public Word(Long id, String word, String phonetic, String explain, Integer classId) {
         this.id = id;
         this.word = word;
         this.phonetic = phonetic;
@@ -66,11 +66,11 @@ public class Word {
         this.explain = explain;
     }
 
-    public String getClassId() {
+    public Integer getClassId() {
         return classId;
     }
 
-    public void setClassId(String classId) {
+    public void setClassId(Integer classId) {
         this.classId = classId;
     }
 

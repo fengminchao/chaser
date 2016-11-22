@@ -26,7 +26,7 @@ public class WordDao extends AbstractDao<Word, Long> {
         public final static Property Word = new Property(1, String.class, "word", false, "WORD");
         public final static Property Phonetic = new Property(2, String.class, "phonetic", false, "PHONETIC");
         public final static Property Explain = new Property(3, String.class, "explain", false, "EXPLAIN");
-        public final static Property ClassId = new Property(4, String.class, "classId", false, "CLASS_ID");
+        public final static Property ClassId = new Property(4, Integer.class, "classId", false, "CLASS_ID");
     }
 
 
@@ -46,7 +46,7 @@ public class WordDao extends AbstractDao<Word, Long> {
                 "\"WORD\" TEXT," + // 1: word
                 "\"PHONETIC\" TEXT," + // 2: phonetic
                 "\"EXPLAIN\" TEXT," + // 3: explain
-                "\"CLASS_ID\" TEXT);"); // 4: classId
+                "\"CLASS_ID\" INTEGER);"); // 4: classId
     }
 
     /** Drops the underlying database table. */
@@ -79,9 +79,9 @@ public class WordDao extends AbstractDao<Word, Long> {
             stmt.bindString(4, explain);
         }
  
-        String classId = entity.getClassId();
+        Integer classId = entity.getClassId();
         if (classId != null) {
-            stmt.bindString(5, classId);
+            stmt.bindLong(5, classId);
         }
     }
 
@@ -109,9 +109,9 @@ public class WordDao extends AbstractDao<Word, Long> {
             stmt.bindString(4, explain);
         }
  
-        String classId = entity.getClassId();
+        Integer classId = entity.getClassId();
         if (classId != null) {
-            stmt.bindString(5, classId);
+            stmt.bindLong(5, classId);
         }
     }
 
@@ -127,7 +127,7 @@ public class WordDao extends AbstractDao<Word, Long> {
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // word
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // phonetic
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // explain
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) // classId
+            cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4) // classId
         );
         return entity;
     }
@@ -138,7 +138,7 @@ public class WordDao extends AbstractDao<Word, Long> {
         entity.setWord(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setPhonetic(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setExplain(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setClassId(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setClassId(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
      }
     
     @Override

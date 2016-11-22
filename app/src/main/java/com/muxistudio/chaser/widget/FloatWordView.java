@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.muxistudio.chaser.R;
 import com.muxistudio.chaser.bean.WordDetail;
+import com.muxistudio.chaser.db.Word;
 import com.muxistudio.chaser.utils.DimenUtil;
 
 /**
@@ -23,7 +24,7 @@ public class FloatWordView extends LinearLayout {
   public static int width = DimenUtil.dp2px(24);
   public static int height = DimenUtil.dp2px(12);
 
-  private WindowManager.LayoutParams mLayoutParams;
+  private static WindowManager.LayoutParams mLayoutParams;
 
   //@BindView(R.id.tv_word) TextView mTvWord;
   //@BindView(R.id.tv_explain) TextView mTvExplain;
@@ -91,9 +92,13 @@ public class FloatWordView extends LinearLayout {
     mWindowManager.updateViewLayout(this,mLayoutParams);
   }
 
-  public void setWord(WordDetail wordDetail){
-    mTvWord.setText(wordDetail.word);
-    mTvExplain.setText(wordDetail.phonetic + wordDetail.explain);
+  public void setWord(Word word){
+    mTvWord.setText(word.getWord());
+    mTvExplain.setText(word.getExplain());
+  }
+
+  public void setParams(WindowManager.LayoutParams layoutParams){
+    mLayoutParams = layoutParams;
   }
 
 }

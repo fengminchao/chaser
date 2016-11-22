@@ -47,7 +47,7 @@ public class FloatWindowManager {
    * @param context 必须为应用程序的Context.
    */
   public static void createFloatView(Context context) {
-    WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+    mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
     if (sFloatWordView == null) {
       sFloatWordView = new FloatWordView(context);
       if (sFloatParams == null) {
@@ -66,7 +66,8 @@ public class FloatWindowManager {
       }
       Log.d("tag", sFloatParams.type + "");
       sFloatWordView.setLayoutParams(sFloatParams);
-      windowManager.addView(sFloatWordView, sFloatParams);
+      sFloatWordView.setParams(sFloatParams);
+      mWindowManager.addView(sFloatWordView, sFloatParams);
     }
   }
 

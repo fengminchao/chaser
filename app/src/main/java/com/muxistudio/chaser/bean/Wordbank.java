@@ -8,10 +8,9 @@ import java.util.List;
 
 public class Wordbank {
 
-  public int id;
+  public int classId;
   public String name;
   public String uploader;
-  public String summary;
   public String category;
   public int download;
 }

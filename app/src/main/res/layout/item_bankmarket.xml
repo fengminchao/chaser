@@ -12,40 +12,38 @@
     >
 
   <TextView
-      android:id="@+id/tv_title"
+      android:id="@+id/tv_name"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:textColor="?android:attr/textColorPrimary"
       android:textSize="18sp"
-      tools:text="四级考试单词"
+      tools:text="四级单词"
       />
 
+  <TextView
+      android:id="@+id/tv_uploader"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      android:textColor="@color/colorSecondary"
+      tools:text="ybao"
+      android:layout_marginRight="8dp"
+      />
   <TextView
       android:id="@+id/tv_category"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignParentBottom="true"
-      android:textColor="@color/colorSecondary"
+      android:layout_toRightOf="@+id/tv_uploader"
       tools:text="考试必备"
       />
-
   <TextView
-      android:id="@+id/tv_number"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentBottom="true"
-      android:layout_marginLeft="16dp"
-      android:layout_toRightOf="@+id/tv_category"
-      tools:text="共3000词"
-      />
-
-  <TextView
-      android:id="@+id/tv_use"
+      android:id="@+id/tv_download"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignParentRight="true"
       android:layout_centerVertical="true"
-      tools:text="当前背诵"
+      tools:text="200次下载"
       />
 
 </RelativeLayout>

@@ -10,6 +10,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,8 +39,13 @@ public class MainActivity extends ToolbarActivity
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     ButterKnife.bind(this);
-    initToolbar(mToolbar);
     mToolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
+    setSupportActionBar(mToolbar);
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    mDrawerLayout.openDrawer(Gravity.START);
+    //getSupportActionBar().setDisplayShowHomeEnabled(true);
+    //initToolbar(mToolbar);
+
     //mToolbar.setTitle(getString(R.string.app_name));
     initView();
     mBtn.setOnClickListener(new View.OnClickListener() {
@@ -61,10 +67,12 @@ public class MainActivity extends ToolbarActivity
 
   private void initView() {
     mNavView.setNavigationItemSelectedListener(this);
+    View headerLayout = mNavView.getHeaderView(0);
+    Log.d("header","header");
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
-    return super.onCreateOptionsMenu(menu);
+    return true;
   }
 
   @Override public boolean onOptionsItemSelected(MenuItem item) {
@@ -84,7 +92,20 @@ public class MainActivity extends ToolbarActivity
   }
 
   @Override public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
+    int itemId = item.getItemId();
+    switch (itemId){
+      case R.id.action_wordbank:
+        WordbankActivity.start(MainActivity.this);
+        return true;
+      case R.id.action_about:
+        AboutActivity.start(MainActivity.this);
+        return true;
+      case R.id.action_setting:
+        SettingActivity.start(MainActivity.this);
+        return true;
+      case R.id.action_share:
+        return true;
+    }
     return false;
   }
 

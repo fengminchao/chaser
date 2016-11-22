@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,6 +21,8 @@ public class WordbankAdapter extends RecyclerView.Adapter<WordbankAdapter.ViewHo
 
   private List<Wordbank> mWordbankList;
 
+  private ItemClickListener mItemClickListener;
+
   public WordbankAdapter(List<Wordbank> wordbanks) {
     super();
     mWordbankList = wordbanks;
@@ -34,11 +37,24 @@ public class WordbankAdapter extends RecyclerView.Adapter<WordbankAdapter.ViewHo
         LayoutInflater.from(parent.getContext()).inflate(R.layout.item_wordbank, parent, false));
   }
 
-  @Override public void onBindViewHolder(ViewHolder holder, int position) {
+  @Override public void onBindViewHolder(final ViewHolder holder, final int position) {
     holder.mTvTitle.setText(mWordbankList.get(position).getName());
     holder.mTvCategory.setText(mWordbankList.get(position).getCategory());
-    if (position == PreferenceUtil.getInt(PreferenceUtil.KEY_CUR_REMBER_BANK)){
+    if (position == PreferenceUtil.getInt(PreferenceUtil.KEY_CUR_REMBER_BANK)) {
       holder.mTvUse.setText("当前背诵词库");
+    }
+    holder.mItemLayout.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View view) {
+        if (mItemClickListener != null){
+          mItemClickListener.onItemClick(mWordbankList.get(position).getName(),mWordbankList.get(position).getClassId());
+        }
+      }
+    });
+  }
+
+  public void setOnItemClickListener(ItemClickListener listener) {
+    if (listener != null) {
+      mItemClickListener = listener;
     }
   }
 
@@ -49,12 +65,17 @@ public class WordbankAdapter extends RecyclerView.Adapter<WordbankAdapter.ViewHo
   class ViewHolder extends RecyclerView.ViewHolder {
     public ViewHolder(View itemView) {
       super(itemView);
-      ButterKnife.bind(this,itemView);
+      ButterKnife.bind(this, itemView);
     }
 
     @BindView(R.id.tv_title) TextView mTvTitle;
     @BindView(R.id.tv_category) TextView mTvCategory;
+    @BindView(R.id.item_layout) RelativeLayout mItemLayout;
     @BindView(R.id.tv_number) TextView mTvNumber;
     @BindView(R.id.tv_use) TextView mTvUse;
+  }
+
+  interface ItemClickListener {
+    void onItemClick(String name, int classId);
   }
 }
