@@ -53,7 +53,7 @@ public class FloatWindowManager {
       if (sFloatParams == null) {
         sFloatParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT);
-        sFloatParams.type = LayoutParams.TYPE_PRIORITY_PHONE;
+        sFloatParams.type = LayoutParams.TYPE_TOAST;
         //sFloatParams.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL | LayoutParams.FLAG_NOT_FOCUSABLE;
         sFloatParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE
             | LayoutParams.FLAG_NOT_TOUCH_MODAL;

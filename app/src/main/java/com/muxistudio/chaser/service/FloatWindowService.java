@@ -2,6 +2,7 @@ package com.muxistudio.chaser.service;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
@@ -17,6 +18,12 @@ public class FloatWindowService extends Service {
 
   private Handler mHandler = new Handler();
   private Timer mTimer;
+
+  private MyBinder mMyBinder = new MyBinder();
+
+  public class MyBinder extends Binder{
+
+  }
 
   @Override public void onCreate() {
     super.onCreate();
@@ -43,7 +50,8 @@ public class FloatWindowService extends Service {
   }
 
   @Override public IBinder onBind(Intent intent) {
-    return null;
+    //return null;
+    return mMyBinder;
   }
 
   class RefreshTask extends TimerTask {

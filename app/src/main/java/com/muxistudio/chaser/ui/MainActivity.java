@@ -1,9 +1,13 @@
 package com.muxistudio.chaser.ui;
 
+import android.app.Service;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -16,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ShareActionProvider;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.muxistudio.chaser.R;
@@ -35,6 +40,18 @@ public class MainActivity extends ToolbarActivity
   @BindView(R.id.nav_view) NavigationView mNavView;
   @BindView(R.id.toolbar) Toolbar mToolbar;
 
+  private ShareActionProvider mShareActionProvider;
+
+  private ServiceConnection mConnection = new ServiceConnection() {
+    @Override public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+      Log.d("main connect", componentName.getClassName());
+    }
+
+    @Override public void onServiceDisconnected(ComponentName componentName) {
+      Log.d("main disconnect", componentName.getClassName());
+    }
+  };
+
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
@@ -42,7 +59,7 @@ public class MainActivity extends ToolbarActivity
     mToolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
     setSupportActionBar(mToolbar);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    mDrawerLayout.openDrawer(Gravity.START);
+    mDrawerLayout.openDrawer(Gravity.LEFT);
     //getSupportActionBar().setDisplayShowHomeEnabled(true);
     //initToolbar(mToolbar);
 
@@ -59,7 +76,12 @@ public class MainActivity extends ToolbarActivity
           } else {
             Intent intent = new Intent(MainActivity.this, FloatWindowService.class);
             startService(intent);
+            bindService(intent, mConnection, Service.BIND_AUTO_CREATE);
           }
+        } else {
+          Intent intent = new Intent(MainActivity.this, FloatWindowService.class);
+          startService(intent);
+          bindService(intent, mConnection, Service.BIND_AUTO_CREATE);
         }
       }
     });
@@ -68,16 +90,19 @@ public class MainActivity extends ToolbarActivity
   private void initView() {
     mNavView.setNavigationItemSelectedListener(this);
     View headerLayout = mNavView.getHeaderView(0);
-    Log.d("header","header");
+    Log.d("header", "header");
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
+    //getMenuInflater().inflate(R.menu.menu_share, menu);
+    //MenuItem item = menu.findItem(R.id.menu_item_share);
+    //mShareActionProvider = (ShareActionProvider) item.getActionProvider();
     return true;
   }
 
   @Override public boolean onOptionsItemSelected(MenuItem item) {
     int itemId = item.getItemId();
-    switch (itemId){
+    switch (itemId) {
       case R.id.action_wordbank:
         WordbankActivity.start(MainActivity.this);
         return true;
@@ -93,7 +118,7 @@ public class MainActivity extends ToolbarActivity
 
   @Override public boolean onNavigationItemSelected(@NonNull MenuItem item) {
     int itemId = item.getItemId();
-    switch (itemId){
+    switch (itemId) {
       case R.id.action_wordbank:
         WordbankActivity.start(MainActivity.this);
         return true;
@@ -104,6 +129,12 @@ public class MainActivity extends ToolbarActivity
         SettingActivity.start(MainActivity.this);
         return true;
       case R.id.action_share:
+        //mShareActionProvider.setShareIntent();
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+        sendIntent.setType("text/plain");
+        startActivity(Intent.createChooser(sendIntent, "share from chaser"));
         return true;
     }
     return false;
