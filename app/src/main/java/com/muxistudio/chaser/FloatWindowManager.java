@@ -23,46 +23,42 @@ import java.util.List;
  */
 public class FloatWindowManager {
 
-  /**
-   * 小悬浮窗View的实例
-   */
   private static FloatWordView sFloatWordView;
 
   private static LayoutParams sFloatParams;
 
-  /**
-   * 用于控制在屏幕上添加或移除悬浮窗
-   */
   private static WindowManager mWindowManager;
 
-  /**
-   * 用于获取手机可用内存
-   */
   private static ActivityManager mActivityManager;
+
+  //一个单词出现的时间
+  private static long sTimeDisplay = 60 * 1000;
+
+  //一组单词的个数
+  private static int sWordNum = 10;
+
+  //一组单词的循环次数
+  private static int sCircleNum = 5;
 
   private static List<WordDetail> sWordDetails;
 
-  /**
-   * 创建一个小悬浮窗。初始位置为屏幕的右部中间位置。
-   *
-   * @param context 必须为应用程序的Context.
-   */
   public static void createFloatView(Context context) {
     WindowManager windowManager = getWindowManager(context);
     if (sFloatWordView == null) {
       sFloatWordView = new FloatWordView(context);
       if (sFloatParams == null) {
         sFloatParams = new LayoutParams();
-        sFloatParams.type = LayoutParams.TYPE_PHONE;
+        sFloatParams.type = LayoutParams.TYPE_SYSTEM_ERROR;
         //sFloatParams.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL | LayoutParams.FLAG_NOT_FOCUSABLE;
         sFloatParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE
-            | LayoutParams.FLAG_NOT_TOUCH_MODAL;
-        sFloatParams.format = PixelFormat.RGBA_8888;
+            | LayoutParams.FLAG_NOT_TOUCH_MODAL
+            | LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+        sFloatParams.format = PixelFormat.TRANSLUCENT ;
         sFloatParams.gravity = Gravity.LEFT | Gravity.TOP;
         sFloatParams.width = FloatWordView.width;
         sFloatParams.height = FloatWordView.height;
         sFloatParams.x = FloatWordView.x;
-        sFloatParams.y = FloatWordView.y - DimenUtil.getStatusBarHeight();
+        sFloatParams.y = FloatWordView.y;
       }
       Log.d("tag", sFloatParams.type + "");
       sFloatWordView.setLayoutParams(sFloatParams);
@@ -71,28 +67,11 @@ public class FloatWindowManager {
     }
   }
 
-  /**
-   * 将小悬浮窗从屏幕上移除。
-   *
-   * @param context 必须为应用程序的Context.
-   */
   public static void removeFloatView(Context context) {
     if (sFloatWordView != null) {
       WindowManager windowManager = getWindowManager(context);
       windowManager.removeView(sFloatWordView);
       sFloatWordView = null;
-    }
-  }
-
-  /**
-   * 更新小悬浮窗的TextView上的数据，显示内存使用的百分比。
-   *
-   * @param context 可传入应用程序上下文。
-   */
-  public static void updateUsedPercent(Context context) {
-    if (sFloatWordView != null) {
-      TextView percentView = (TextView) sFloatWordView.findViewById(R.id.tv_word);
-      percentView.setText(getUsedPercentValue(context));
     }
   }
 
@@ -105,21 +84,10 @@ public class FloatWindowManager {
     }
   }
 
-  /**
-   * 是否有悬浮窗(包括小悬浮窗和大悬浮窗)显示在屏幕上。
-   *
-   * @return 有悬浮窗显示在桌面上返回true，没有的话返回false。
-   */
   public static boolean isWindowShowing() {
     return sFloatWordView != null;
   }
 
-  /**
-   * 如果WindowManager还未创建，则创建一个新的WindowManager返回。否则返回当前已创建的WindowManager。
-   *
-   * @param context 必须为应用程序的Context.
-   * @return WindowManager的实例，用于控制在屏幕上添加或移除悬浮窗。
-   */
   private static WindowManager getWindowManager(Context context) {
     if (mWindowManager == null) {
       mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -127,12 +95,6 @@ public class FloatWindowManager {
     return mWindowManager;
   }
 
-  /**
-   * 如果ActivityManager还未创建，则创建一个新的ActivityManager返回。否则返回当前已创建的ActivityManager。
-   *
-   * @param context 可传入应用程序上下文。
-   * @return ActivityManager的实例，用于获取手机可用内存。
-   */
   private static ActivityManager getActivityManager(Context context) {
     if (mActivityManager == null) {
       mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
@@ -140,40 +102,5 @@ public class FloatWindowManager {
     return mActivityManager;
   }
 
-  /**
-   * 计算已使用内存的百分比，并返回。
-   *
-   * @param context 可传入应用程序上下文。
-   * @return 已使用内存的百分比，以字符串形式返回。
-   */
-  public static String getUsedPercentValue(Context context) {
-    String dir = "/proc/meminfo";
-    try {
-      FileReader fr = new FileReader(dir);
-      BufferedReader br;
-      br = new BufferedReader(fr, 2048);
-      String memoryLine = br.readLine();
-      String subMemoryLine = memoryLine.substring(memoryLine.indexOf("MemTotal:"));
-      br.close();
-      long totalMemorySize = Integer.parseInt(subMemoryLine.replaceAll("\\D+", ""));
-      long availableSize = getAvailableMemory(context) / 1024;
-      int percent = (int) ((totalMemorySize - availableSize) / (float) totalMemorySize * 100);
-      return percent + "%";
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return "悬浮窗";
-  }
-
-  /**
-   * 获取当前可用内存，返回数据以字节为单位。
-   *
-   * @param context 可传入应用程序上下文。
-   * @return 当前可用内存。
-   */
-  private static long getAvailableMemory(Context context) {
-    ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
-    getActivityManager(context).getMemoryInfo(mi);
-    return mi.availMem;
-  }
+  //public void change
 }

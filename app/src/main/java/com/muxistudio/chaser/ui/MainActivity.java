@@ -24,7 +24,6 @@ import android.widget.ShareActionProvider;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.muxistudio.chaser.R;
-import com.muxistudio.chaser.bean.Wordbank;
 import com.muxistudio.chaser.service.FloatWindowService;
 import com.muxistudio.chaser.ui.about.AboutActivity;
 import com.muxistudio.chaser.ui.setting.SettingActivity;
@@ -35,10 +34,11 @@ public class MainActivity extends ToolbarActivity
 
   @BindView(R.id.btn) Button mBtn;
   //@BindView(R.id.btn_rm) Button mBtnRm;
-  @BindView(R.id.drawer_layout) DrawerLayout mDrawerLayout;
   @BindView(R.id.content) FrameLayout mContent;
   @BindView(R.id.nav_view) NavigationView mNavView;
   @BindView(R.id.toolbar) Toolbar mToolbar;
+  @BindView(R.id.btn_stop) Button mBtnStop;
+  @BindView(R.id.drawer_layout) DrawerLayout mDrawerLayout;
 
   private ShareActionProvider mShareActionProvider;
 
@@ -52,10 +52,13 @@ public class MainActivity extends ToolbarActivity
     }
   };
 
+  private Intent serviceIntent;
+
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     ButterKnife.bind(this);
+    mToolbar = (Toolbar) findViewById(R.id.toolbar);
     mToolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
     setSupportActionBar(mToolbar);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -77,12 +80,19 @@ public class MainActivity extends ToolbarActivity
             Intent intent = new Intent(MainActivity.this, FloatWindowService.class);
             startService(intent);
             bindService(intent, mConnection, Service.BIND_AUTO_CREATE);
+            serviceIntent = intent;
           }
         } else {
           Intent intent = new Intent(MainActivity.this, FloatWindowService.class);
           startService(intent);
           bindService(intent, mConnection, Service.BIND_AUTO_CREATE);
         }
+      }
+    });
+
+    mBtnStop.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View view) {
+        stopService(serviceIntent);
       }
     });
   }
@@ -103,17 +113,20 @@ public class MainActivity extends ToolbarActivity
   @Override public boolean onOptionsItemSelected(MenuItem item) {
     int itemId = item.getItemId();
     switch (itemId) {
+      case android.R.id.home:
+        mDrawerLayout.openDrawer(Gravity.LEFT);
+        break;
       case R.id.action_wordbank:
         WordbankActivity.start(MainActivity.this);
-        return true;
+        break;
       case R.id.action_setting:
         SettingActivity.start(MainActivity.this);
-        return true;
+        break;
       case R.id.action_about:
         AboutActivity.start(MainActivity.this);
-        return true;
+        break;
     }
-    return super.onOptionsItemSelected(item);
+    return true;
   }
 
   @Override public boolean onNavigationItemSelected(@NonNull MenuItem item) {

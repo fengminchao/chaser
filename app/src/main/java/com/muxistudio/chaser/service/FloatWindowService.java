@@ -50,7 +50,6 @@ public class FloatWindowService extends Service {
   }
 
   @Override public IBinder onBind(Intent intent) {
-    //return null;
     return mMyBinder;
   }
 
@@ -70,11 +69,6 @@ public class FloatWindowService extends Service {
             FloatWindowManager.updateFloatView(FloatWindowService.this);
           }
         });
-        //mHandler.post(new Runnable() {
-        //  @Override public void run() {
-        //    FloatWindowManager.removeFloatView(FloatWindowService.this);
-        //  }
-        //});
       }
 
     }

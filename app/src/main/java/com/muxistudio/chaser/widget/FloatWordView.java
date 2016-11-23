@@ -19,16 +19,14 @@ import com.muxistudio.chaser.utils.DimenUtil;
 
 public class FloatWordView extends LinearLayout {
 
-  public static int x = DimenUtil.getScreenWidth() / 2;
+  public static int x = 0;
   public static int y = 0;
 
-  public static int width = DimenUtil.dp2px(24);
-  public static int height = DimenUtil.dp2px(12);
+  public static int width;
+  public static int height;
 
   private static WindowManager.LayoutParams mLayoutParams;
 
-  //@BindView(R.id.tv_word) TextView mTvWord;
-  //@BindView(R.id.tv_explain) TextView mTvExplain;
   private TextView mTvWord;
   private TextView mTvExplain;
 
@@ -71,14 +69,16 @@ public class FloatWordView extends LinearLayout {
       case MotionEvent.ACTION_DOWN:
         xInView = event.getX();
         yInView = event.getY();
-        xInScreen = event.getRawX();
-        yInScreen = event.getRawY();
-        break;
+      //  xInView = event.getX();
+      //  yInView = event.getY();
+      //  xInScreen = event.getRawX();
+      //  yInScreen = event.getRawY();
+      //  break;
       case MotionEvent.ACTION_MOVE:
-        xInView = event.getX();
-        yInView = event.getY();
+        Log.d("view",xInView + "  " + yInView);
         xInScreen = event.getRawX();
         yInScreen = event.getRawY();
+        Log.d("screen",xInScreen + "  " + yInScreen);
         updateFloatView();
         break;
       default:
@@ -89,9 +89,12 @@ public class FloatWordView extends LinearLayout {
 
   private void updateFloatView() {
     x = (int)(xInScreen - xInView);
-    x = x <= 0 ? 0 : x;
+    //x = (int) xInScreen;
+    x = x < 0 ? 0 : x;
+    //y = (int)yInScreen;
     y = (int)(yInScreen - yInView);
-    y = y <= 0 ? 0 : y;
+    y = y < 0 ? 0 : y;
+    Log.d("x + y",x + "  " + y);
     mLayoutParams.x = x;
     mLayoutParams.y = y;
     mWindowManager.updateViewLayout(this,mLayoutParams);
