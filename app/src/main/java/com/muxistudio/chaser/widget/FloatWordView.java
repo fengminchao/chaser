@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -56,6 +57,10 @@ public class FloatWordView extends LinearLayout {
     //ButterKnife.bind(this,view);
     mTvWord = (TextView) findViewById(R.id.tv_word);
     mTvExplain = (TextView) findViewById(R.id.tv_explain);
+    View view= findViewById(R.id.layout_floatview);
+    width = view.getLayoutParams().width;
+    height = view.getLayoutParams().height;
+
     mTvWord.setText("hello");
     mTvExplain.setText("hi");
   }

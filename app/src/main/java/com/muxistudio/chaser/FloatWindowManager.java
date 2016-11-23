@@ -6,6 +6,7 @@ import android.graphics.PixelFormat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.TextView;
@@ -47,27 +48,26 @@ public class FloatWindowManager {
    * @param context 必须为应用程序的Context.
    */
   public static void createFloatView(Context context) {
-    mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+    WindowManager windowManager = getWindowManager(context);
     if (sFloatWordView == null) {
       sFloatWordView = new FloatWordView(context);
       if (sFloatParams == null) {
-        sFloatParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT);
-        sFloatParams.type = LayoutParams.TYPE_TOAST;
+        sFloatParams = new LayoutParams();
+        sFloatParams.type = LayoutParams.TYPE_PHONE;
         //sFloatParams.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL | LayoutParams.FLAG_NOT_FOCUSABLE;
         sFloatParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE
             | LayoutParams.FLAG_NOT_TOUCH_MODAL;
         sFloatParams.format = PixelFormat.RGBA_8888;
         sFloatParams.gravity = Gravity.LEFT | Gravity.TOP;
-        //sFloatParams.width = FloatWordView.width;
-        //sFloatParams.height = FloatWordView.height;
+        sFloatParams.width = FloatWordView.width;
+        sFloatParams.height = FloatWordView.height;
         sFloatParams.x = FloatWordView.x;
         sFloatParams.y = FloatWordView.y - DimenUtil.getStatusBarHeight();
       }
       Log.d("tag", sFloatParams.type + "");
       sFloatWordView.setLayoutParams(sFloatParams);
       sFloatWordView.setParams(sFloatParams);
-      mWindowManager.addView(sFloatWordView, sFloatParams);
+      windowManager.addView(sFloatWordView, sFloatParams);
     }
   }
 
