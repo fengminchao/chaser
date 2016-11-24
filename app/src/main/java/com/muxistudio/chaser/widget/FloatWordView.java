@@ -51,11 +51,9 @@ public class FloatWordView extends LinearLayout {
 
   private void initWordView() {
     LayoutInflater.from(mContext).inflate(R.layout.view_float_word, this);
-    Log.d("tag", "tag");
-    //ButterKnife.bind(this,view);
     mTvWord = (TextView) findViewById(R.id.tv_word);
     mTvExplain = (TextView) findViewById(R.id.tv_explain);
-    View view= findViewById(R.id.layout_floatview);
+    View view = findViewById(R.id.layout_floatview);
     width = view.getLayoutParams().width;
     height = view.getLayoutParams().height;
 
@@ -69,16 +67,11 @@ public class FloatWordView extends LinearLayout {
       case MotionEvent.ACTION_DOWN:
         xInView = event.getX();
         yInView = event.getY();
-      //  xInView = event.getX();
-      //  yInView = event.getY();
-      //  xInScreen = event.getRawX();
-      //  yInScreen = event.getRawY();
-      //  break;
       case MotionEvent.ACTION_MOVE:
-        Log.d("view",xInView + "  " + yInView);
+        Log.d("view", xInView + "  " + yInView);
         xInScreen = event.getRawX();
         yInScreen = event.getRawY();
-        Log.d("screen",xInScreen + "  " + yInScreen);
+        Log.d("screen", xInScreen + "  " + yInScreen);
         updateFloatView();
         break;
       default:
@@ -88,25 +81,22 @@ public class FloatWordView extends LinearLayout {
   }
 
   private void updateFloatView() {
-    x = (int)(xInScreen - xInView);
-    //x = (int) xInScreen;
+    x = (int) (xInScreen - xInView);
     x = x < 0 ? 0 : x;
-    //y = (int)yInScreen;
-    y = (int)(yInScreen - yInView);
+    y = (int) (yInScreen - yInView);
     y = y < 0 ? 0 : y;
-    Log.d("x + y",x + "  " + y);
+    Log.d("x + y", x + "  " + y);
     mLayoutParams.x = x;
     mLayoutParams.y = y;
-    mWindowManager.updateViewLayout(this,mLayoutParams);
+    mWindowManager.updateViewLayout(this, mLayoutParams);
   }
 
-  public void setWord(Word word){
+  public void setWord(Word word) {
     mTvWord.setText(word.getWord());
     mTvExplain.setText(word.getExplain());
   }
 
-  public void setParams(WindowManager.LayoutParams layoutParams){
+  public void setParams(WindowManager.LayoutParams layoutParams) {
     mLayoutParams = layoutParams;
   }
-
 }

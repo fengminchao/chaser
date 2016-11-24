@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.TextView;
 import com.muxistudio.chaser.bean.WordDetail;
+import com.muxistudio.chaser.db.Word;
 import com.muxistudio.chaser.widget.FloatWordView;
 import com.muxistudio.chaser.utils.DimenUtil;
 import java.io.BufferedReader;
@@ -31,14 +32,7 @@ public class FloatWindowManager {
 
   private static ActivityManager mActivityManager;
 
-  //一个单词出现的时间
-  private static long sTimeDisplay = 60 * 1000;
 
-  //一组单词的个数
-  private static int sWordNum = 10;
-
-  //一组单词的循环次数
-  private static int sCircleNum = 5;
 
   private static List<WordDetail> sWordDetails;
 
@@ -75,12 +69,9 @@ public class FloatWindowManager {
     }
   }
 
-  public static void updateFloatView(Context context) {
+  public static void updateFloatView(Word word) {
     if (sFloatWordView != null) {
-      TextView mTvWord = (TextView) sFloatWordView.findViewById(R.id.tv_word);
-      TextView mTvExplain = (TextView) sFloatWordView.findViewById(R.id.tv_explain);
-      mTvWord.setText("fa");
-      mTvExplain.setText("fas");
+      sFloatWordView.setWord(word);
     }
   }
 

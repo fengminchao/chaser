@@ -41,6 +41,34 @@
         android:text="stop a service"
         />
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="设置每组词数"
+        android:id="@+id/et_word_num"
+        />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/et_circle_num"
+        android:hint="循环词数"
+        />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/et_time"
+        android:hint="间隔时间"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_enter"
+        android:text="确认"
+        />
+
     <FrameLayout
         android:id="@+id/content"
         android:layout_width="match_parent"
@@ -55,7 +83,7 @@
       android:layout_height="match_parent"
       android:layout_gravity="start"
       app:headerLayout="@layout/view_header"
-      app:menu="@menu/menu_main"
+      app:menu="@menu/menu_nav"
       />
 
 </android.support.v4.widget.DrawerLayout>
