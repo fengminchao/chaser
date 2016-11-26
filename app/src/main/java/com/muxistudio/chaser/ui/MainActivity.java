@@ -23,6 +23,11 @@ import android.widget.FrameLayout;
 import android.widget.ShareActionProvider;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.iflytek.cloud.RecognizerListener;
+import com.iflytek.cloud.RecognizerResult;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechError;
+import com.iflytek.cloud.SpeechRecognizer;
 import com.muxistudio.chaser.R;
 import com.muxistudio.chaser.service.FloatWindowService;
 import com.muxistudio.chaser.ui.about.AboutActivity;
@@ -46,6 +51,8 @@ public class MainActivity extends ToolbarActivity
   @BindView(R.id.btn_enter) Button mBtnEnter;
 
   private ShareActionProvider mShareActionProvider;
+
+  private RecognizerListener mRecognizerListener;
 
   private ServiceConnection mConnection = new ServiceConnection() {
     @Override public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
@@ -109,6 +116,47 @@ public class MainActivity extends ToolbarActivity
     });
   }
 
+  public void initVoice() {
+    //1.创建SpeechRecognizer对象，第二个参数：本地听写时传InitListener
+    SpeechRecognizer mIat = SpeechRecognizer.createRecognizer(this, null);
+    //2.设置听写参数，详见《科大讯飞MSC API手册(Android)》SpeechConstant类
+    mIat.setParameter(SpeechConstant.DOMAIN, "iat");
+    mIat.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
+    mIat.setParameter(SpeechConstant.ACCENT, "mandarin ");
+    //3.开始听写   mIat.startListening(mRecoListener);
+    //听写监听器
+    RecognizerListener mRecoListener = new RecognizerListener() {
+      //听写结果回调接口(返回Json格式结果，用户可参见附录12.1)；
+      //一般情况下会通过onResults接口多次返回结果，完整的识别内容是多次结果的累加；
+      //关于解析Json的代码可参见MscDemo中JsonParser类；
+      //isLast等于true时会话结束。
+
+      @Override public void onVolumeChanged(int i, byte[] bytes) {
+
+      }
+
+      @Override public void onBeginOfSpeech() {
+
+      }
+
+      @Override public void onEndOfSpeech() {
+
+      }
+
+      @Override public void onResult(RecognizerResult recognizerResult, boolean b) {
+
+      }
+
+      @Override public void onError(SpeechError speechError) {
+
+      }
+
+      @Override public void onEvent(int i, int i1, int i2, Bundle bundle) {
+
+      }
+    };
+  }
+
   private void initView() {
     mNavView.setNavigationItemSelectedListener(this);
     View headerLayout = mNavView.getHeaderView(0);
@@ -116,7 +164,7 @@ public class MainActivity extends ToolbarActivity
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.menu_main,menu);
+    getMenuInflater().inflate(R.menu.menu_main, menu);
     return true;
   }
 
