@@ -1,4 +1,4 @@
-package com.muxistudio.chaser;
+package com.muxistudio.chaser.utils;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -72,6 +72,8 @@ public class FloatWindowManager {
   public static void updateFloatView(Word word) {
     if (sFloatWordView != null) {
       sFloatWordView.setWord(word);
+    }else {
+      sFloatWordView.showEmpty();
     }
   }
 
@@ -93,5 +95,4 @@ public class FloatWindowManager {
     return mActivityManager;
   }
 
-  //public void change
 }

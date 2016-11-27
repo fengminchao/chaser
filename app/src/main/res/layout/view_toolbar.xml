@@ -10,9 +10,9 @@
       android:layout_width="match_parent"
       android:layout_height="56dp"
       android:id="@+id/toolbar"
-      android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+      app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
       android:background="@color/colorPrimary"
       app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-      ></android.support.v7.widget.Toolbar>
+    />
 
 </merge>

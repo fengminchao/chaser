@@ -6,9 +6,8 @@ import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
-import com.muxistudio.chaser.FloatWindowManager;
+import com.muxistudio.chaser.utils.FloatWindowManager;
 import com.muxistudio.chaser.db.Word;
-import com.muxistudio.chaser.db.WordDao;
 import com.muxistudio.chaser.utils.ChaserDaoHelper;
 import java.util.List;
 import java.util.Timer;
@@ -32,7 +31,7 @@ public class FloatWindowService extends Service {
   //一组单词的循环次数
   private int circleNum = 5;
 
-  private long curWordId = 1;
+  //private long curWordId = 1;
 
   private final int wordListSize = 100;
 
@@ -45,7 +44,7 @@ public class FloatWindowService extends Service {
   //当前要背的单词classid
   private int mClassId;
 
-  //要背单词的 list ,长度为默认值
+  //要背单词的 list ,长度为一组单词的个数
   private List<Word> mWordList;
 
   public class FloatViewBinder extends Binder {
@@ -107,14 +106,14 @@ public class FloatWindowService extends Service {
   public void changeWordbank(int classId) {
     mClassId = classId;
     wordPos = 0;
-    mWordList = ChaserDaoHelper.loadWord(wordListSize, classId);
+    mWordList = ChaserDaoHelper.loadWord(mWordList.size(), classId);
     FloatWindowManager.updateFloatView(mWordList.get(wordPos));
   }
 
   //改变同一个词库的单词
   public void changeWord(int id) {
     if (id > mWordList.get(mWordList.size() - 1).getId() || id < mWordList.get(0).getId()) {
-      mWordList = ChaserDaoHelper.loadWord(id, wordListSize, mClassId);
+      mWordList = ChaserDaoHelper.loadWord(id, mWordList.size(), mClassId);
       wordPos = 0;
     } else {
       wordPos = id - mWordList.get(0).getId().intValue();
@@ -123,15 +122,27 @@ public class FloatWindowService extends Service {
   }
 
   public void changeCircleNum(int num) {
+    if (curCircleNum > num) {
+      curCircleNum = 1;
+      wordPos = 0;
+      mWordList = ChaserDaoHelper.loadWord(mWordList.get(mWordList.size() - 1).getId() + 1,
+          mWordList.size(), mClassId);
+    }
     circleNum = num;
   }
 
   public void changeWordSize(int size) {
     wordNum = size;
-  }
-
-  public void doCircle() {
-
+    mWordList = ChaserDaoHelper.loadWord(mWordList.get(0).getId(), size, mClassId);
+    if (wordPos > mWordList.size() - 1) {
+      wordPos = 0;
+      curCircleNum++;
+      if (curCircleNum > circleNum) {
+        mWordList =
+            ChaserDaoHelper.loadWord(mWordList.get(mWordList.size() - 1).getId(), size, mClassId);
+        curCircleNum = 1;
+      }
+    }
   }
 
   public void changeTime(long time) {
@@ -156,23 +167,34 @@ public class FloatWindowService extends Service {
       } else {
         mHandler.post(new Runnable() {
           @Override public void run() {
-            if (wordPos < mWordList.size() - 1) {
-              FloatWindowManager.updateFloatView(mWordList.get(++wordPos));
-              if (wordPos % wordNum >= wordNum - 1 && curCircleNum <= circleNum) {
-                doCircle();
-                //wordPos -=;
-
+            showEndMessageIfNull();
+            FloatWindowManager.updateFloatView(mWordList.get(wordPos));
+            if (wordPos == mWordList.size() - 1) {
+              if (curCircleNum < circleNum) {
+                wordPos = 0;
+                curCircleNum++;
+              } else {
+                wordPos = 0;
+                mWordList =
+                    ChaserDaoHelper.loadWord(mWordList.get(mWordList.size() - 1).getId() + 1,
+                        wordNum, mClassId);
+                curCircleNum = 1;
               }
-            } else {
-              FloatWindowManager.updateFloatView(mWordList.get(wordPos));
-              changeWord((int) (mWordList.get(wordPos).getId() + 1));
-              wordPos = 0;
-
+              return;
             }
+            wordPos++;
           }
-
         });
       }
+    }
+  }
+
+  /**
+   * 当前词库背诵完成时调用
+   */
+  public void showEndMessageIfNull() {
+    if (mWordList == null || mWordList.size() == 0) {
+      FloatWindowManager.updateFloatView(null);
     }
   }
 }

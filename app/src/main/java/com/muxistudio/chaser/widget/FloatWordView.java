@@ -99,4 +99,9 @@ public class FloatWordView extends LinearLayout {
   public void setParams(WindowManager.LayoutParams layoutParams) {
     mLayoutParams = layoutParams;
   }
+
+  public void showEmpty(){
+    mTvWord.setText("词库已背诵完成");
+    mTvExplain.setText("");
+  }
 }
